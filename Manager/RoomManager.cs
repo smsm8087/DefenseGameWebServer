@@ -7,8 +7,8 @@ namespace DefenseGameWebServer.Manager
     public class RoomSession
     {
         public string RoomCode;
-        public int HostUserId;
-        public List<int> Participants = new();
+        public string HostUserId;
+        public List<string> Participants = new();
         public DateTime CreatedAt = DateTime.UtcNow;
     }
 
@@ -17,7 +17,7 @@ namespace DefenseGameWebServer.Manager
         private readonly Dictionary<string, RoomSession> _rooms = new();
         private readonly Random _rand = new();
 
-        public RoomSession CreateRoom(int hostUserId)
+        public RoomSession CreateRoom(string hostUserId)
         {
             string code;
             do
@@ -37,7 +37,7 @@ namespace DefenseGameWebServer.Manager
             return room;
         }
 
-        public bool TryJoinRoom(string code, int userId, out RoomSession room)
+        public bool TryJoinRoom(string code, string userId, out RoomSession room)
         {
             if (_rooms.TryGetValue(code, out room))
             {
@@ -53,6 +53,12 @@ namespace DefenseGameWebServer.Manager
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, 6)
                 .Select(c => c[_rand.Next(c.Length)]).ToArray());
+        }
+        public int GetParticipantsCount(string roomCode)
+        {
+            if (!_rooms.ContainsKey(roomCode))
+                throw new ArgumentException("Room does not exist.", nameof(roomCode));
+            return _rooms[roomCode].Participants.Count;
         }
     }
 }

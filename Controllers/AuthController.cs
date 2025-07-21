@@ -35,7 +35,7 @@ namespace DefenseGameApiServer.Controllers
             _db.Users.Add(user);
             _db.SaveChanges();
 
-            return Ok(new { message = "success", userId = user.Id, nickname = user.Nickname });
+            return Ok(new { message = "success", userId = user.Username, nickname = user.Nickname });
         }
 
         //암호화
@@ -61,7 +61,7 @@ namespace DefenseGameApiServer.Controllers
             return Ok(new
             {
                 message = "success",
-                userId = user.Id,
+                userId = user.Username,
                 nickname = user.Nickname
             });
         }
