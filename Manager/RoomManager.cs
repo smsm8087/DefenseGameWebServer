@@ -10,6 +10,7 @@ namespace DefenseGameWebServer.Manager
         public string HostUserId;
         public List<string> Participants = new();
         public DateTime CreatedAt = DateTime.UtcNow;
+        public bool isStarted = false;
     }
 
     public class RoomManager
@@ -54,11 +55,17 @@ namespace DefenseGameWebServer.Manager
             return new string(Enumerable.Repeat(chars, 6)
                 .Select(c => c[_rand.Next(c.Length)]).ToArray());
         }
-        public int GetParticipantsCount(string roomCode)
+        public List<string> GetParticipants(string roomCode)
         {
             if (!_rooms.ContainsKey(roomCode))
                 throw new ArgumentException("Room does not exist.", nameof(roomCode));
-            return _rooms[roomCode].Participants.Count;
+            return _rooms[roomCode].Participants;
+        }
+        public RoomSession GetRoom(string roomCode)
+        {
+            if (!_rooms.TryGetValue(roomCode, out var room))
+                throw new ArgumentException("Room does not exist.", nameof(roomCode));
+            return room;
         }
     }
 }
