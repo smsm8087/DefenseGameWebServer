@@ -55,12 +55,22 @@ namespace DefenseGameWebServer.Manager
                 if (!room.Participants.Contains(userId)) return false;
                 room.Participants.Remove(userId);
                 Console.WriteLine($"[Room Out] user {userId} out {code}");
+
                 if (room.Participants.Count <= 0)
                 {
                     _rooms.Remove(code);
-                    Console.WriteLine($"[Room Removed] user {userId} out {code}");
+                    room = null;
+                    Console.WriteLine($"[Room Remove] user {userId} out {code}");
+                } else
+                {
+                    //호스트 이동
+                    if (room.HostUserId == userId)
+                    {
+                        room.HostUserId = room.Participants[0];
+                        Console.WriteLine($"[Room HostMove] user {userId} out {code}");
+                    }
                 }
-                return true;
+                    return true;
             }
             return false;
         }

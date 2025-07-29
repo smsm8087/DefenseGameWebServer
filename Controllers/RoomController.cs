@@ -30,7 +30,14 @@ namespace DefenseGameApiServer.Controllers
         {
             if (_roomManager.TryOutRoom(roomCode, userId, out var room))
             {
-                return Ok();
+                if(room == null)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return Ok(new { hostId = room.HostUserId});
+                }
             }
             return NotFound(new { message = "방에서 나가지 못했습니다" });
         }
