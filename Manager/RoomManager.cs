@@ -48,6 +48,22 @@ namespace DefenseGameWebServer.Manager
             }
             return false;
         }
+        public bool TryOutRoom(string code, string userId, out RoomSession room)
+        {
+            if (_rooms.TryGetValue(code, out room))
+            {
+                if (!room.Participants.Contains(userId)) return false;
+                room.Participants.Remove(userId);
+                Console.WriteLine($"[Room Out] user {userId} out {code}");
+                if (room.Participants.Count <= 0)
+                {
+                    _rooms.Remove(code);
+                    Console.WriteLine($"[Room Removed] user {userId} out {code}");
+                }
+                return true;
+            }
+            return false;
+        }
 
         private string GenerateRoomCode()
         {

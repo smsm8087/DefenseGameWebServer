@@ -25,6 +25,15 @@ namespace DefenseGameApiServer.Controllers
             }
             return NotFound(new { message = "방이 존재하지 않습니다." });
         }
+        [HttpPost("out")]
+        public IActionResult Out([FromForm] string userId, [FromForm] string roomCode)
+        {
+            if (_roomManager.TryOutRoom(roomCode, userId, out var room))
+            {
+                return Ok();
+            }
+            return NotFound(new { message = "방에서 나가지 못했습니다" });
+        }
         [HttpPost("status")]
         public IActionResult GetRoomPaticipantCount([FromForm] string roomCode)
         {
