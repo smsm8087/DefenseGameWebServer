@@ -61,5 +61,24 @@ namespace DefenseGameApiServer.Controllers
             room.isStarted = true; 
             return Ok(new { playerIds = participants });
         }
+        [HttpPost("kick")]
+        public IActionResult KickUserFromRoom([FromForm] string userId, [FromForm] string roomCode, [FromForm] string targetUserID )
+        {
+            RoomSession room = _roomManager.GetRoom(roomCode);
+            if (room == null)
+            {
+                return NotFound(new { message = "방이 존재하지 않습니다." });
+            }
+            if(userId != room.HostUserId)
+            {
+                return BadRequest(new { message = "호스트만 유저를 추방할 수 있습니다." });
+            }
+            if( userId == targetUserID)
+            {
+                return BadRequest(new { message = "자기 자신을 추방할 수 없습니다." });
+            }
+            _roomManager.TryOutRoom(roomCode, targetUserID, out room);
+            return Ok();
+        }
     }
 }
