@@ -59,7 +59,7 @@ namespace DefenseGameApiServer.Controllers
 
             // 게임 시작 상태로 변경
             room.isStarted = true; 
-            return Ok(new { playerIds = participants });
+            return Ok();
         }
         [HttpPost("kick")]
         public IActionResult KickUserFromRoom([FromForm] string userId, [FromForm] string roomCode, [FromForm] string targetUserID )
