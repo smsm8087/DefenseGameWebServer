@@ -93,5 +93,18 @@ namespace DefenseGameWebServer.Manager
                 throw new ArgumentException("Room does not exist.", nameof(roomCode));
             return room;
         }
+        public bool TryGetRoom(string roomCode, out RoomSession room)
+            => _rooms.TryGetValue(roomCode, out room);
+
+        public bool TryGetParticipants(string roomCode, out List<string> participants)
+        {
+            if (_rooms.TryGetValue(roomCode, out var r))
+            {
+                participants = r.Participants;
+                return true;
+            }
+            participants = null;
+            return false;
+        }
     }
 }
